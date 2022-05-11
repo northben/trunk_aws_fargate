@@ -33,6 +33,12 @@ resource "aws_ecs_task_definition" "trunk" {
           containerPort = 9000
         }
       ]
+      mountPoints = [
+        {
+          sourceVolume = "splunk-indexes",
+          containerPath = "/opt/splunk/var/lib/splunk/"
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs",
         options = {
@@ -43,10 +49,32 @@ resource "aws_ecs_task_definition" "trunk" {
       }
     }
   ])
+  volume {
+    name      = "splunk-indexes"
+    efs_volume_configuration {
+      file_system_id          = aws_efs_file_system.splunk_indexes.id
+      transit_encryption      = "DISABLED"
+    }
+  }
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
   }
+}
+resource "aws_efs_file_system" "splunk_indexes" {
+  tags = {
+    Name = "Splunk indexes"
+  }
+}
+resource "aws_efs_mount_target" "splunk_indexes1" {
+  file_system_id = aws_efs_file_system.splunk_indexes.id
+  subnet_id      = aws_subnet.splunk_subnet1.id
+  security_groups = [aws_security_group.efs.id]
+}
+resource "aws_efs_mount_target" "splunk_indexes2" {
+  file_system_id = aws_efs_file_system.splunk_indexes.id
+  subnet_id      = aws_subnet.splunk_subnet2.id
+  security_groups = [aws_security_group.efs.id]
 }
 resource "aws_ecs_cluster" "trunk" {
   name               = "trunk"
@@ -68,9 +96,9 @@ resource "aws_ecs_service" "trunk" {
   launch_type          = "FARGATE"
   force_new_deployment = true
   network_configuration {
-    subnets          = [aws_subnet.trunk_subnet1.id, aws_subnet.trunk_subnet2.id]
+    subnets          = [aws_subnet.splunk_subnet1.id, aws_subnet.splunk_subnet2.id]
     assign_public_ip = true
-    security_groups  = [aws_security_group.allow_splunk.id]
+    security_groups  = [aws_security_group.splunk.id]
   }
   load_balancer {
     target_group_arn = aws_lb_target_group.splunk_target.arn
