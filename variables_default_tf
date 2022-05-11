@@ -1,0 +1,32 @@
+variable "aws_instance_type" {
+  description = "Value of the AWS instance type"
+  type        = string
+  default     = "t2.micro"
+}
+variable "aws_profile" {
+  description = "Use this AWS credential profile to connect to AWS"
+  type        = string
+  default     = ""
+}
+variable "aws_region" {
+  description = "Create resources in this AWS region"
+  type        = string
+  default     = "us-east-2"
+}
+variable "route53_zone" {
+  description = "Create trunk DNS resource in this route53 zone"
+  type        = string
+  default     = ""
+}
+
+variable "trunk_ecr_image" {
+  description = "URL to the Trunk ECR repository image URI"
+  type        = string
+  default     = ""
+}
+
+variable "trunk_dns_name" {
+  description = "DNS name where the trunk server is accessible"
+  type        = string
+  default     = ""
+}
