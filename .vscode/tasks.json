@@ -1,0 +1,57 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "terraform destroy",
+            "type": "shell",
+            "command": "terraform destroy -auto-approve",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "terraform apply",
+            "type": "shell",
+            "command": "terraform apply -auto-approve",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "terraform apply replace trunk container",
+            "type": "shell",
+            "command": "terraform apply -auto-approve -replace=aws_ecs_task_definition.trunk",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "terraform init",
+            "type": "shell",
+            "command": "terraform init -upgrade",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "terraform plan",
+            "type": "shell",
+            "command": "terraform plan",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
