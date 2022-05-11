@@ -1,13 +1,18 @@
+resource "aws_vpc" "trunk_vpc" {
+  cidr_block = "172.31.0.0/16"
+}
 resource "aws_subnet" "trunk_subnet1" {
-  vpc_id     = var.vpc_id
-  cidr_block = var.subnet1_cidr
+  vpc_id     = aws_vpc.trunk_vpc.id
+  cidr_block =  "172.31.48.0/20"
+  availability_zone = "${var.aws_region}a"
   tags = {
     Name = "trunk 1"
   }
 }
 resource "aws_subnet" "trunk_subnet2" {
-  vpc_id     = var.vpc_id
-  cidr_block = var.subnet2_cidr
+  vpc_id     = aws_vpc.trunk_vpc.id
+  cidr_block = "172.31.64.0/20"
+  availability_zone = "${var.aws_region}b"
   tags = {
     Name = "trunk 2"
   }
@@ -24,7 +29,7 @@ resource "aws_lb_target_group" "splunk_target" {
   name        = "splunk"
   port        = 8000
   protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.trunk_vpc.id
   target_type = "ip"
   health_check {
     path = "/en-US/account/login"
@@ -43,7 +48,7 @@ resource "aws_lb_target_group" "webhook_target" {
   name        = "webhook"
   port        = 9000
   protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.trunk_vpc.id
   target_type = "ip"
   health_check {
     path = "/trello"
