@@ -111,3 +111,8 @@ resource "aws_ecs_service" "trunk" {
     container_port   = 9000
   }
 }
+
+resource "aws_cloudwatch_log_group" "this" {
+  name = "/ecs/trunk"
+  retention_in_days = 1
+}
