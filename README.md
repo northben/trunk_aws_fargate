@@ -1,7 +1,7 @@
 README
 ===
 
-This repo contains a terraform template that will deploy a container with [Trunk](https://github.com/northben/trunk) and [TA-trello-webhook](https://github.com/northben/ta-trello-webhook) preconfigured to index Trello Webhooks in a new VPC using AWS Fargate. 
+This repo contains a terraform template that will deploy Splunk Enterprise in a container with [Trunk](https://github.com/northben/trunk) and [TA-trello-webhook](https://github.com/northben/ta-trello-webhook) preconfigured to index Trello Webhooks in a new VPC using AWS Fargate. 
 
 Prerequisites
 ---
